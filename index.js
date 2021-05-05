@@ -6,7 +6,8 @@ var cors = require('cors');
 
 app.use(cors());
 
- 
+const docxConverter = require('docx-pdf');
+const path = require('path');
 const fs = require('fs');
  
 
@@ -38,8 +39,17 @@ app.post('/upload', function (req, res) {
         } else if (err) {
             return res.status(500).json(err)
         }
-        const file = fs.readFileSync(req.file.path);
+
+        let filePath = path.join('./public',  req.file.filename);
+
+        const file = fs.readFileSync(filePath );
        
+        docxConverter(file,'./public/output.pdf',function(err,result){
+          if(err){
+            console.log(err);
+          }
+          console.log('result'+result);
+        });
 
     return res.status(200).send(req.file);
  })
