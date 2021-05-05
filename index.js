@@ -6,7 +6,6 @@ var cors = require('cors');
 
 app.use(cors());
 
-const libre = require('libreoffice-convert');
  
 const fs = require('fs');
  
@@ -40,14 +39,7 @@ app.post('/upload', function (req, res) {
             return res.status(500).json(err)
         }
         const file = fs.readFileSync(req.file.path);
-        libre.convert(file,".pdf",undefined,(err, done) => {
-            if (err) {
-              console.log(`Error converting file: ${err}`);
-            }
-            
-            // Here in done you have pdf file which you can save or transfer in another stream
-            fs.writeFileSync(Date.now() + "output.pdf", done);
-        });
+       
 
     return res.status(200).send(req.file);
  })
