@@ -31,6 +31,15 @@ app.get('/', function (req, res) {
   res.send('Online Service Backend');
 });
 
+app.get('/image', function (req, res){
+  res.setHeader('Content-disposition', 'attachment; filename=1.png');
+  res.download('D:\\My Project\\online-services-backend\\public\\1.png',  (err) =>{
+    if(err){
+      console.log(err);
+    }
+  });
+});
+
 app.post('/upload', function (req, res) {
     // console.log(req.data);
     upload(req, res, function (err) {
@@ -51,10 +60,12 @@ app.post('/upload', function (req, res) {
           console.log('result'+result);
         });
 
-    return res.status(200).send(req.file);
- })
+    
+ });
 
-})
+ return res.status(200).send(req.file);
+
+});
 
  
 app.listen(8080);
