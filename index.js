@@ -31,14 +31,21 @@ app.get('/', function (req, res) {
   res.send('Online Service Backend');
 });
 
-app.get('/image', function (req, res){
-  res.setHeader('Content-disposition', 'attachment; filename=1.png');
-  res.download('D:\\My Project\\online-services-backend\\public\\1.png',  (err) =>{
+app.get('/download', function (req, res){
+
+  const src = fs.createReadStream(__dirname + '/public/output.pdf');
+
+  src.pipe(res);
+
+  
+
+  res.download(__dirname + '/public/output.pdf', 'output.pdf', (err) =>{
     if(err){
       console.log(err);
     }
   });
-});
+
+}); 
 
 app.post('/upload', function (req, res) {
     // console.log(req.data);
@@ -49,21 +56,25 @@ app.post('/upload', function (req, res) {
             return res.status(500).json(err)
         }
 
-        let filePath = path.join('./public',  req.file.filename);
+        // let filePath = path.join('./public',  req.file.filename);
 
-        const file = fs.readFileSync(filePath );
+        // const file = fs.readFileSync(filePath );
        
-        docxConverter(file,'./public/output.pdf',function(err,result){
+        docxConverter(req.file.path,'./public/output.pdf',function(err,result){
           if(err){
             console.log(err);
           }
           console.log('result'+result);
         });
-
-    
  });
+  const src = fs.createReadStream(__dirname + '/public/output.pdf');
 
- return res.status(200).send(req.file);
+  src.pipe(res);
+  res.download(__dirname + '/public/output.pdf', 'output.pdf', (err) =>{
+  if(err){
+    console.log(err);
+  }
+});
 
 });
 
